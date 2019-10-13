@@ -19,7 +19,7 @@ constructor(private http: HttpClient) { }
 changeMemberPhoto(photoUrl: string ) {
   this.photoUrl.next(photoUrl);
 }
-login(model: any) {
+login(model: User) {
   return this.http.post(this.baseUrl + 'login', model)
     .pipe( map((response: any) => {
       const user = response;
@@ -32,7 +32,7 @@ login(model: any) {
       }
     }));
 }
-register(model: any) {
+register(model: User) {
   return this.http.post(this.baseUrl + 'register', model);
 }
 loggedIn() {
