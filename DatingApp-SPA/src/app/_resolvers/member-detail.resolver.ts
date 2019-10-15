@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 export class MemberDetailResolver implements Resolve<User> {
     constructor(private userService: UserService, private router: Router, private aletfify: AlertifyService) { }
     resolve(route: ActivatedRouteSnapshot): Observable<User> {
+        // tslint:disable-next-line:no-string-literal
         return this.userService.getUser(route.params['id']).pipe(
             catchError(error => {
                 this.aletfify.error('Problems retrieving data');
