@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule } from 'ngx-bootstrap';
 import { TimeAgoPipe} from 'time-ago-pipe';
 import { NgxGalleryModule} from 'ngx-gallery';
 import { AppComponent } from './app.component';
@@ -59,6 +59,7 @@ export function tokenGetter() {
       BsDatepickerModule.forRoot(),
       RouterModule.forRoot(AppRoutes),
       PaginationModule.forRoot(),
+      ButtonsModule.forRoot(),
       NgxGalleryModule,
       FileUploadModule,
       JwtModule.forRoot({
