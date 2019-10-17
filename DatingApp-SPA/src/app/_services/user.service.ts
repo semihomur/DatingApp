@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 export class UserService {
 baseUrl = environment.apiUrl;
 constructor(private http: HttpClient) { }
-  getUsers(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>> {
+  getUsers(page?, itemsPerPage?, userParams?, likesParam?): Observable<PaginatedResult<User[]>> {
     const paginationResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
     let params = new HttpParams();
     if (page != null && itemsPerPage != null) {
@@ -31,6 +31,12 @@ constructor(private http: HttpClient) { }
       params = params.append('maxAge', userParams.maxAge);
       params = params.append('gender', userParams.gender);
       params = params.append('orderBy', userParams.orderBy);
+    }
+    if (likesParam === 'Likers') {
+      params = params.append('likers', 'true');
+    }
+    if (likesParam === 'Likees') {
+      params = params.append('likees', 'true');
     }
     return this.http.get<User[]>( this.baseUrl + 'users', {observe: 'response', params })
       .pipe(
@@ -53,5 +59,8 @@ constructor(private http: HttpClient) { }
   }
   DeletePhoto(userId, photoId) {
     return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + photoId);
+  }
+  sendLike(id: number, recipientId: number) {
+    return this.http.post(this.baseUrl + 'users/' + id + '/like/' + recipientId, {});
   }
 }
