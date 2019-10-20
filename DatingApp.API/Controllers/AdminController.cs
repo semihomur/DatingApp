@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using DatingApp.API.Models;
 using System;
 using AutoMapper;
+using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Options;
+using DatingApp.API.Helpers;
+using CloudinaryDotNet;
 
 namespace DatingApp.API.Controllers
 {
@@ -19,12 +23,20 @@ namespace DatingApp.API.Controllers
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public AdminController(DataContext context, UserManager<User> userManager, IMapper mapper)
+        private Cloudinary _cloudinary;
+        private readonly IOptions<CloudinarySettings> _cloudinarConfig;
+        public AdminController(DataContext context, UserManager<User> userManager, IMapper mapper, IOptions<CloudinarySettings> cloudinarConfig)
         {
             _mapper = mapper;
             _userManager = userManager;
             _context = context;
-
+            _cloudinarConfig = cloudinarConfig;
+            Account acc = new Account(
+                _cloudinarConfig.Value.CloudName,
+                _cloudinarConfig.Value.ApiKey,
+                _cloudinarConfig.Value.ApiSecret
+            );
+            _cloudinary = new Cloudinary(acc);
         }
 
         [Authorize(Policy = "RequireAdminRole")]
@@ -53,8 +65,15 @@ namespace DatingApp.API.Controllers
         [HttpDelete("deletePhoto/{id}")]
         public async Task<IActionResult> DeletePhoto(int id)
         {
-            var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
-            _context.Remove(photo);
+            var photo = await _context.Photos.IgnoreQueryFilters().FirstOrDefaultAsync(p => p.Id == id);
+            if(photo.PublicId!=null) {
+            var deleteParams = new DeletionParams(photo.PublicId);
+            var result = _cloudinary.Destroy(deleteParams);
+            if (result.Result == "ok")
+                _context.Remove(photo);
+            }
+            if(photo.PublicId ==null)
+                _context.Remove(photo);
             await _context.SaveChangesAsync();
             return Ok();
         }
