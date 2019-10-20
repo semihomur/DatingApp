@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,7 +15,6 @@ using Microsoft.Extensions.Options;
 
 namespace DatingApp.API.Controllers
 {
-    [Authorize]
     [Route("api/users/{userId}/photos")]
     [ApiController]
     public class PhotosController: ControllerBase
@@ -98,13 +98,15 @@ namespace DatingApp.API.Controllers
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePhoto(int userId, int id) {
-            if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
                 return Unauthorized();
-            }
-            var userFromRepo= await _repo.GetUser(userId);
+                }
+                var userFromRepo= await _repo.GetMe(userId);
 
-            if(!userFromRepo.Photos.Any(i=>i.Id==id))
-                return Unauthorized();
+                if(!userFromRepo.Photos.Any(i=>i.Id==id))
+                {
+                    return Unauthorized();
+                }
             
             var photoFromRepo = await _repo.GetPhoto(id);
             if(photoFromRepo.IsMain) {

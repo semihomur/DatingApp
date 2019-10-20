@@ -1,0 +1,8 @@
+<div class="row">
+  <div *ngFor="let photo of photos" class="photoFlex">
+    <label>{{photo.user.knownAs}}</label>
+    <img src="{{photo.url}}" alt="{{photo.description}}" class="img-thumbnail mr-1">
+    <button class="btn btn-danger btn-sm mb-1" (click)="DeletePhoto(photo.id)">Cancel</button>
+    <button class="btn btn-success btn-sm" (click)="ApprovePhoto(photo.id)">Approved</button>
+  </div>
+</div>
