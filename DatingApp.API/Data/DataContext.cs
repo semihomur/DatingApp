@@ -13,6 +13,7 @@ namespace DatingApp.API.Data
         public DbSet<Photo> Photos  { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Messages> Messages { get; set; }
+        public DbSet<TokenModel> Tokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
 

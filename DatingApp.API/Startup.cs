@@ -50,13 +50,19 @@ namespace DatingApp.API
             builder.AddRoleValidator<RoleValidator<Role>>();
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
-             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+             services.AddAuthentication( o =>
+                {
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+             )
             .AddJwtBearer(options=>{options.TokenValidationParameters =
              new TokenValidationParameters{
                 ValidateIssuerSigningKey=true,
                 IssuerSigningKey =new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                ValidateIssuer=false,
-                ValidateAudience=false
+                ValidateIssuer=true,
+                ValidateAudience=true
             };
             });
             services.AddAuthorization(options=>{
@@ -74,6 +80,7 @@ namespace DatingApp.API
                     opt.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.AddScoped<TokenModel>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             Mapper.Reset();
             services.AddAutoMapper();
