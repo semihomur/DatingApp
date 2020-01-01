@@ -37,7 +37,8 @@ namespace DatingApp.API
     public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x=>x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
             IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
                 opt.Password.RequireDigit =false;
                 opt.Password.RequiredLength =4;
@@ -61,8 +62,9 @@ namespace DatingApp.API
              new TokenValidationParameters{
                 ValidateIssuerSigningKey=true,
                 IssuerSigningKey =new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                ValidateIssuer=true,
-                ValidateAudience=true
+                ValidateIssuer=false,
+                ValidateAudience=false,
+                ClockSkew = TimeSpan.Zero
             };
             });
             services.AddAuthorization(options=>{

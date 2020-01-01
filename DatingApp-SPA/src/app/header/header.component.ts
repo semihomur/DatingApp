@@ -35,11 +35,8 @@ export class HeaderComponent implements OnInit {
     return this.authService.loggedIn();
   }
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.authService.decodedToken = null;
-    this.authService.user = null;
     this.alertify.message('Logged out');
     this.router.navigate(['/']);
+    this.authService.logout();
   }
 }

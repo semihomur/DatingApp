@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule, ModalModule } from 'ngx-bootstrap';
@@ -39,6 +39,7 @@ import { PhotoManagementComponent } from './admin/photo-management/photo-managem
 import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FilterStringPipe } from './_pipe/filterString.pipe';
+import { AuthInterceptor } from './_guard/auth.interceptor';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -79,18 +80,11 @@ export function tokenGetter() {
       PaginationModule.forRoot(),
       ButtonsModule.forRoot(),
       NgxGalleryModule,
-      FileUploadModule,
-      JwtModule.forRoot({
-         config: {
-            // tslint:disable-next-line:object-literal-shorthand
-            tokenGetter: tokenGetter,
-            whitelistedDomains: ['localhost:5000'],
-            blacklistedRoutes: ['localhost:5000/api/auth']
-         }
-      })
+      FileUploadModule
    ],
    providers: [
       AuthService,
+      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
       AlertifyService,
       AuthGuard,
       UserService,

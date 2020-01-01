@@ -5,16 +5,21 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.API.Data;
+using DatingApp.API.Dtos;
 using DatingApp.API.Helpers;
 using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {   
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
@@ -23,13 +28,15 @@ namespace DatingApp.API.Controllers
         private readonly AppSettings _appSettings;
         private readonly TokenModel _token;
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
         
-        public TokenController(UserManager<User> userManager, IOptions<AppSettings> appSettings, TokenModel token, DataContext context)
+        public TokenController(UserManager<User> userManager, IOptions<AppSettings> appSettings, TokenModel token, DataContext context,IMapper mapper)
         {
             _userManager = userManager;
             _appSettings = appSettings.Value;
             _token = token;
             _context = context;
+            _mapper = mapper;
         }
         
         [HttpPost("login")]
@@ -68,7 +75,12 @@ namespace DatingApp.API.Controllers
                 _context.Tokens.Add(rtNew);
                 await _context.SaveChangesAsync();
                 var response = await CreateAccesToken(user, rtNew.Value);
-                return Ok(new {authToken = response});
+                var appUser = await _userManager.Users.Include(p=> p.Photos).FirstOrDefaultAsync(u=>u.UserName == model.Username);
+                var userForReturn = _mapper.Map<UserForListDto>(appUser);
+                return Ok(new {
+                    authToken = response,
+                    user = userForReturn
+                    });
             }   
             catch(Exception ex) {
                     return new UnauthorizedResult();
@@ -99,7 +111,12 @@ namespace DatingApp.API.Controllers
                 _context.Tokens.Add(newRToken);
                 await _context.SaveChangesAsync();
                 var accessToken = await CreateAccesToken(user, newRToken.Value);
-                return Ok(new {authToken = accessToken});
+                var appUser = await _userManager.Users.Include(p=> p.Photos).FirstOrDefaultAsync(u=>u.UserName == model.Username);
+                var userForReturn = _mapper.Map<UserForListDto>(appUser);
+                return Ok(new {
+                    authToken = accessToken,
+                    user = userForReturn
+                });
             }
             return BadRequest();
         }
