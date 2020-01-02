@@ -55,6 +55,69 @@ namespace DatingApp.API.Controllers
                     return new UnauthorizedResult(); // 401
             }
         }
+        private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Username);
+            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password)) {
+                var newRToken = CreateRefreshToken(_appSettings.ClientId, user.Id);
+                var oldrTokens = _context.Tokens.Where(rt => rt.UserId == user.Id);
+                if (oldrTokens !=null) {
+                    foreach(var oldrt in oldrTokens) {
+                        _context.Tokens.Remove(oldrt);
+                    }
+                }
+                _context.Tokens.Add(newRToken);
+                await _context.SaveChangesAsync();
+                var accessToken = await CreateAccesToken(user, newRToken.Value);
+                var appUser = await _userManager.Users.Include(p=> p.Photos).FirstOrDefaultAsync(u=>u.UserName == model.Username);
+                var userForReturn = _mapper.Map<UserForListDto>(appUser);
+                return Ok(new {
+                    authToken = accessToken,
+                    user = userForReturn
+                });
+            }
+            return Unauthorized();
+        }
+        private TokenModel CreateRefreshToken(string cliendId, int userId) {
+            return new TokenModel() {
+                ClientId = cliendId,
+                UserId = userId,
+                Value = Guid.NewGuid().ToString("N"),
+                CreatedDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddMinutes(90)
+            };
+        }
+        private async Task<TokenResponse> CreateAccesToken(User user, string refreshToken)
+        {
+              double tokenExpiryTime = Convert.ToDouble(_appSettings.ExpireTime);
+              var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.Token));
+              var roles = await _userManager.GetRolesAsync(user);
+              var tokenHandler = new JwtSecurityTokenHandler();
+               var claims = new List<Claim> 
+                {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                new Claim(ClaimTypes.Name,user.UserName)
+                };
+            foreach(var role in roles){
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(tokenExpiryTime),
+                SigningCredentials = creds
+            };
+            var newtoken = tokenHandler.CreateToken(tokenDescriptor);
+            var encodedToken = tokenHandler.WriteToken(newtoken);
+            return new TokenResponse(){
+                token = encodedToken,
+                expiration = newtoken.ValidTo,
+                UserRoles = roles,
+                refresh_token = refreshToken,
+                username = user.UserName
+            };
+        }
 
         private async Task<IActionResult> RefreshToken(TokenRequestModel model)
         {
@@ -85,72 +148,6 @@ namespace DatingApp.API.Controllers
             catch(Exception ex) {
                     return new UnauthorizedResult();
             }
-        }
-        private TokenModel CreateRefreshToken(string cliendId, int userId) {
-            return new TokenModel() {
-                ClientId = cliendId,
-                UserId = userId,
-                Value = Guid.NewGuid().ToString("N"),
-                CreatedDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMinutes(90)
-
-            };
-        }
-
-        private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
-        {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password)) {
-                var newRToken = CreateRefreshToken(_appSettings.ClientId, user.Id);
-                var oldrTokens = _context.Tokens.Where(rt => rt.UserId == user.Id);
-                if (oldrTokens !=null) {
-                    foreach(var oldrt in oldrTokens) {
-                        _context.Tokens.Remove(oldrt);
-                    }
-                }
-                _context.Tokens.Add(newRToken);
-                await _context.SaveChangesAsync();
-                var accessToken = await CreateAccesToken(user, newRToken.Value);
-                var appUser = await _userManager.Users.Include(p=> p.Photos).FirstOrDefaultAsync(u=>u.UserName == model.Username);
-                var userForReturn = _mapper.Map<UserForListDto>(appUser);
-                return Ok(new {
-                    authToken = accessToken,
-                    user = userForReturn
-                });
-            }
-            return BadRequest();
-        }
-
-        private async Task<TokenResponse> CreateAccesToken(User user, string refreshToken)
-        {
-              double tokenExpiryTime = Convert.ToDouble(_appSettings.ExpireTime);
-              var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.Token));
-              var roles = await _userManager.GetRolesAsync(user);
-              var tokenHandler = new JwtSecurityTokenHandler();
-               var claims = new List<Claim> 
-                {
-                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new Claim(ClaimTypes.Name,user.UserName)
-                };
-            foreach(var role in roles){
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(tokenExpiryTime),
-                SigningCredentials = creds
-            };
-            var newtoken = tokenHandler.CreateToken(tokenDescriptor);
-            var encodedToken = tokenHandler.WriteToken(newtoken);
-            return new TokenResponse(){
-                token = encodedToken,
-                expiration = newtoken.ValidTo,
-                UserRoles = roles,
-                refresh_token = refreshToken,
-                username = user.UserName
-            };
         }
     }
 }

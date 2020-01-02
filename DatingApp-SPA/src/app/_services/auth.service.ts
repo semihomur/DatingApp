@@ -28,7 +28,7 @@ login(model: any) {
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('refreshToken', response.authToken.refresh_token);
         localStorage.setItem('username', response.authToken.username);
-        this.decodedToken = this.jwtHelper.decodeToken(response.token);
+        this.decodedToken = this.jwtHelper.decodeToken(response.authToken.token);
         this.user = response.user;
         this.changeMemberPhoto(this.user.photoUrl);
       }
@@ -38,13 +38,15 @@ getNewRefreshToken(): Observable<any> {
     const username = localStorage.getItem('username');
     const refreshToken = localStorage.getItem('refreshToken');
     const grantType = 'refresh_token';
-    return this.http.post<any>(this.baseUrl, {username, refreshToken,  grantType}).pipe(
+    return this.http.post<any>(this.baseUrl + 'login', {username, refreshToken,  grantType}).pipe(
         map(result => {
             if (result && result.authToken.token) {
-                // this.loginStatus.next(true);
                 localStorage.setItem('token', result.authToken.token);
                 localStorage.setItem('username', result.authToken.username);
+                localStorage.setItem('user', JSON.stringify(result.user));
                 localStorage.setItem('refreshToken', result.authToken.refresh_token);
+                this.decodedToken = this.jwtHelper.decodeToken(result.authToken.token);
+                this.user = result.user;
             }
             return result as any;
         })

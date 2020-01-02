@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../_services/auth.service';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { tap, catchError, retry, switchMap, finalize, filter, take } from 'rxjs/operators';
-import { $ } from 'protractor';
+import { tap, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -16,11 +15,6 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(this.attachTokenToRequest(request))
             .pipe(
-                tap((event: HttpEvent<any>) => {
-                    if (event instanceof HttpResponse) {
-                        console.log('Success');
-                    }
-                }),
                 catchError((err): Observable<any> => {
                     if (err instanceof HttpErrorResponse) {
                         switch ((err as HttpErrorResponse).status) {
@@ -55,6 +49,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     if (tokenResponse) {
                         localStorage.setItem('token', tokenResponse.authToken.token);
                         localStorage.setItem('username', tokenResponse.authToken.username);
+                        localStorage.setItem('user', JSON.stringify(tokenResponse.user));
                         localStorage.setItem('refreshToken', tokenResponse.authToken.refresh_token);
                         console.log('Token refreshed');
                         return next.handle(this.attachTokenToRequest(request));
