@@ -9,7 +9,8 @@ import { User } from '../_models/user';
   providedIn: 'root'
 })
 export class AuthService {
-baseUrl = environment.apiUrl + 'token/';
+baseUrl = environment.apiUrl + 'auth/';
+baseTokenUrl = environment.apiUrl + 'token/';
 jwtHelper = new JwtHelperService();
 decodedToken: any;
 user: User;
@@ -21,7 +22,7 @@ changeMemberPhoto(photoUrl: string ) {
 }
 login(model: any) {
   const grantType = 'password';
-  return this.http.post(this.baseUrl + 'login', {username: model.username, password: model.password, grantType})
+  return this.http.post(this.baseTokenUrl + 'login', {username: model.username, password: model.password, grantType})
     .pipe( map((response: any) => {
       if (response) {
         localStorage.setItem('token', response .authToken.token);
@@ -38,7 +39,7 @@ getNewRefreshToken(): Observable<any> {
     const username = localStorage.getItem('username');
     const refreshToken = localStorage.getItem('refreshToken');
     const grantType = 'refresh_token';
-    return this.http.post<any>(this.baseUrl + 'login', {username, refreshToken,  grantType}).pipe(
+    return this.http.post<any>(this.baseTokenUrl + 'login', {username, refreshToken,  grantType}).pipe(
         map(result => {
             if (result && result.authToken.token) {
                 localStorage.setItem('token', result.authToken.token);
@@ -67,6 +68,8 @@ loggedIn() {
 logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  localStorage.removeItem('username');
+  localStorage.removeItem('refreshToken');
   this.decodedToken = null;
   this.user = null;
 }

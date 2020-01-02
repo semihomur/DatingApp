@@ -4,7 +4,18 @@
     <p class="lead">Come on in to view your matches... All you need to do is sign up!</p>
     <div class="text-center" *ngIf="!authService.loggedIn()">
       <button class="btn btn-primary btn-lg mr-5" (click)="register()">Register</button>
-      <button class="btn btn-info btn-lg">Learn More</button>
+      <button class="btn btn-info btn-lg" (click)="openModal(template)">Learn More</button>
+      <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Learn More</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Many of the applications provide personality tests for matching or use algorithms to match users. These factors enhance the possibility of users getting matched with a compatible candidate. Users are in control; they are provided with many options so there are enough matches that fit their particular type. Users can simply choose to not match the candidates that they know they are not interested in. Narrowing down options is easy. Once users think they are interested, they are able to chat and get to know the potential candidate. This type of communication saves the time, money, and risk users would not avoid if they were dating the traditional way. Online dating offers convenience; people want dating to work around their schedules. Online dating can also increase self-confidence; even if users get rejected, they know there are hundreds of other candidates that will want to match with them so they can simply move on to the next option. In fact, 60% of U.S. adults agree that online dating is a good way to meet people and 66% say they have gone on a real date with someone they met through an application. Today, 5% of married Americans or Americans in serious relationships said they met their significant other online
+        </div>
+      </ng-template>
     </div>
   </div>
   <div class="container" *ngIf="registerMode">

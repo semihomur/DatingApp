@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../_services/auth.service';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { tap, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
+import { catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,7 @@ import { tap, catchError, switchMap, finalize, filter, take } from 'rxjs/operato
 export class AuthInterceptor implements HttpInterceptor {
     private isTokenRefreshing: boolean;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-    constructor(private acct: AuthService) {}
+    constructor(private acct: AuthService, private alertify: AlertifyService) {}
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(this.attachTokenToRequest(request))
             .pipe(
@@ -22,7 +23,8 @@ export class AuthInterceptor implements HttpInterceptor {
                                 console.log('Token expired. Attemtping refresh');
                                 return this.HandleHttpResponseError(request, next);
                             case 400:
-                                return this.acct.logout() as any;
+                                this.alertify.error(err.error != null ? err.error : 'Error');
+                                // return this.acct.logout() as any;
                         }
                     } else {
                         return throwError(this.HandleError);

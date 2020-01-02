@@ -79,6 +79,7 @@ export function tokenGetter() {
       RouterModule.forRoot(AppRoutes),
       PaginationModule.forRoot(),
       ButtonsModule.forRoot(),
+      ModalModule.forRoot(),
       NgxGalleryModule,
       FileUploadModule
    ],

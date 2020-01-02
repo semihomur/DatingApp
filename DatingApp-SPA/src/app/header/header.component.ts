@@ -22,14 +22,11 @@ export class HeaderComponent implements OnInit {
     this.authService.login(this.model).subscribe(next => {
       this.alertify.success('Logged in successfully');
     }, error => {
-      this.alertify.error(error);
+      this.alertify.error('Password or username is wrong');
     }, () => {
       this.router.navigate(['/members']);
     }
     );
-    /*console.log(this.loginForm);
-    console.log(this.model);
-    */
   }
   loggedIn() {
     return this.authService.loggedIn();

@@ -76,7 +76,7 @@ namespace DatingApp.API.Controllers
                     user = userForReturn
                 });
             }
-            return Unauthorized();
+            return BadRequest();
         }
         private TokenModel CreateRefreshToken(string cliendId, int userId) {
             return new TokenModel() {

@@ -43,6 +43,7 @@ namespace DatingApp.API
                 opt.Password.RequireDigit =false;
                 opt.Password.RequiredLength =4;
                 opt.Password.RequireNonAlphanumeric =false;
+                opt.Password.RequireLowercase=false;
                 opt.Password.RequireUppercase =false;
             });
 
