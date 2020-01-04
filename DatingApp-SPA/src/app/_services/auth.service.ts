@@ -12,6 +12,7 @@ export class AuthService {
 baseUrl = environment.apiUrl + 'auth/';
 baseTokenUrl = environment.apiUrl + 'token/';
 jwtHelper = new JwtHelperService();
+refreshedRole = new BehaviorSubject<number>(1);
 decodedToken: any;
 user: User;
 photoUrl = new BehaviorSubject<string>('../../assets/user.png');
@@ -32,6 +33,7 @@ login(model: any) {
         this.decodedToken = this.jwtHelper.decodeToken(response.authToken.token);
         this.user = response.user;
         this.changeMemberPhoto(this.user.photoUrl);
+        this.refreshedRole.next(1);
       }
     }));
 }
@@ -48,6 +50,7 @@ getNewRefreshToken(): Observable<any> {
                 localStorage.setItem('refreshToken', result.authToken.refresh_token);
                 this.decodedToken = this.jwtHelper.decodeToken(result.authToken.token);
                 this.user = result.user;
+                this.refreshedRole.next(1);
             }
             return result as any;
         })

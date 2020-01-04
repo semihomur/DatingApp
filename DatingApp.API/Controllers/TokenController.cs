@@ -26,15 +26,13 @@ namespace DatingApp.API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly AppSettings _appSettings;
-        private readonly TokenModel _token;
         private readonly DataContext _context;
         private readonly IMapper _mapper;
         
-        public TokenController(UserManager<User> userManager, IOptions<AppSettings> appSettings, TokenModel token, DataContext context,IMapper mapper)
+        public TokenController(UserManager<User> userManager, IOptions<AppSettings> appSettings, DataContext context,IMapper mapper)
         {
             _userManager = userManager;
             _appSettings = appSettings.Value;
-            _token = token;
             _context = context;
             _mapper = mapper;
         }
@@ -84,7 +82,7 @@ namespace DatingApp.API.Controllers
                 UserId = userId,
                 Value = Guid.NewGuid().ToString("N"),
                 CreatedDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMinutes(90)
+                ExpiryDate = DateTime.UtcNow.AddDays(90)
             };
         }
         private async Task<TokenResponse> CreateAccesToken(User user, string refreshToken)

@@ -19,14 +19,18 @@ export class HeaderComponent implements OnInit {
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
   }
   login() {
-    this.authService.login(this.model).subscribe(next => {
-      this.alertify.success('Logged in successfully');
-    }, error => {
-      this.alertify.error('Password or username is wrong');
-    }, () => {
-      this.router.navigate(['/members']);
+    try {
+      this.authService.login(this.model).subscribe(next => {
+        this.alertify.success('Logged in successfully');
+      }, error => {
+        this.alertify.error('Password or username is wrong');
+      }, () => {
+        this.router.navigate(['/members']);
+      }
+      );
+    } catch {
+      this.alertify.error('Error');
     }
-    );
   }
   loggedIn() {
     return this.authService.loggedIn();
