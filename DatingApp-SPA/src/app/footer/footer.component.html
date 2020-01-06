@@ -1,0 +1,9 @@
+<button class="footer shadow-md btn" (click)="toggle=!toggle">
+  <span *ngIf="!toggle;else toggleClose"><i class="fa fa-info"></i></span>
+  <ng-template #toggleClose><i class="fa fa-times-circle"></i></ng-template>
+</button>
+<div *ngIf="toggle" class="toggle">
+    <div class="container my-4 d-flex justify-content-center align-items-center shadow-md">
+      <p class="d-inline-block m-0">© 2020 Mr.Rent, Inc. All rights reserved</p> 
+    </div>
+</div>

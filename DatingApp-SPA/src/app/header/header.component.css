@@ -6,3 +6,8 @@ img  {
     border:2px solid #fff;
     display: inline;
 }
+@media only screen and (max-width: 575px) {
+   input {
+       margin-bottom: 1.5rem;
+   }
+  }

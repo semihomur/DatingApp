@@ -1,0 +1,29 @@
+.footer{
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    border-radius: 15px;
+    z-index: 3;
+    background: #3498db;
+}
+.toggle {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #ddd;
+    border: 1px solid #ebebeb;
+    z-index: 2;
+}
+i{
+    font-size: 20px;
+    vertical-align: middle;
+    color:#fff;
+}
+@media only screen and (max-width: 770px) {
+    .toggle {
+        display: none;
+    }
+    .footer {
+        display: none;
+    }
+  }

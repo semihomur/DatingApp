@@ -40,6 +40,7 @@ import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { FilterStringPipe } from './_pipe/filterString.pipe';
 import { AuthInterceptor } from './_guard/auth.interceptor';
+import { FooterComponent } from './footer/footer.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -64,7 +65,8 @@ export function tokenGetter() {
       UserManagementComponent,
       PhotoManagementComponent,
       RolesModalComponent,
-      FilterStringPipe
+      FilterStringPipe,
+      FooterComponent
    ],
    imports: [
       BrowserModule,
@@ -97,7 +99,9 @@ export function tokenGetter() {
       MessagesResolver,
       AdminService
    ],
-   entryComponents: [RolesModalComponent],
+   entryComponents: [
+      RolesModalComponent
+   ],
    bootstrap: [
       AppComponent
    ]
