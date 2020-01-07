@@ -34,8 +34,8 @@ export class MemberDetailComponent implements OnInit {
     });
     this.galleryOptions = [
       {
-        width: '500px',
-        height: '500px',
+        width: '100%',
+        height: '100%',
         imagePercent : 100,
         thumbnailsColumns: 4,
         imageAnimation: NgxGalleryAnimation.Slide,
@@ -74,7 +74,7 @@ export class MemberDetailComponent implements OnInit {
     this.userService.sendLike(this.authService.decodedToken.nameid, id).subscribe((res) => {
       this.alertify.success('You have liked:' + this.user.knownAs);
     }, error => {
-      this.alertify.error(error.error);
+      this.alertify.error('You already liked this user');
     });
   }
 

@@ -18,8 +18,8 @@ export class MemberCardComponent implements OnInit {
   sendLike(id: number) {
     this.userService.sendLike(this.authService.decodedToken.nameid, id).subscribe((res) => {
       this.alertify.success('You have liked:' + this.user.knownAs);
-    }, error => {
-      this.alertify.error(error.error);
+    }, (error) => {
+      this.alertify.error('You already liked this user');
     });
   }
 
