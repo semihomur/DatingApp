@@ -87,4 +87,8 @@ logout() {
     });
     return isMatch;
   }
+  SendCode(email: string) {
+    const emailObj = {email};
+    return this.http.post(this.baseUrl + 'getEmail', emailObj);
+  }
 }

@@ -23,6 +23,17 @@
     <div class="invalid-feedback">Please choose a username</div>
   </div>
   <div class="form-group">
+    <input type="text" class="form-control d-inline-block w-75" [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" formControlName="email" placeholder="Email">
+    <div class="invalid-feedback float-left" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">Email is required</div>
+    <div class="invalid-feedback float-left" *ngIf="registerForm.get('email').errors?.pattern && registerForm.get('email').touched">Email type is not correct</div>
+    <button class="btn btn-info w-25" type="button" (click)="SendCode()">Get Code</button>
+  </div>
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': registerForm.get('emailCode').errors && registerForm.get('emailCode').touched}" class="form-control"
+     placeholder="Email Code" formControlName="emailCode">
+    <div class="invalid-feedback" *ngIf="registerForm.get('emailCode').touched && registerForm.get('emailCode').hasError('required')">Email code as is required</div>
+  </div>
+  <div class="form-group">
     <input [ngClass]="{'is-invalid': registerForm.get('knownAs').errors && registerForm.get('knownAs').touched}" class="form-control"
      placeholder="Known as" formControlName="knownAs">
     <div class="invalid-feedback" *ngIf="registerForm.get('knownAs').touched && registerForm.get('knownAs').hasError('required')">Known as is required</div>

@@ -53,6 +53,7 @@ namespace DatingApp.API.Controllers
                     return new UnauthorizedResult(); // 401
             }
         }
+        
         private async Task<IActionResult> GenerateNewToken(TokenRequestModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);

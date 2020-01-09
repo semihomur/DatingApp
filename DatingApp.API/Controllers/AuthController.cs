@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
 namespace DatingApp.API.Controllers
 {
     [AllowAnonymous]
@@ -27,9 +27,11 @@ namespace DatingApp.API.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IDatingRepository _repo;
 
-        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper)
+        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, IDatingRepository repo)
         {
+            _repo = repo;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
@@ -38,19 +40,29 @@ namespace DatingApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            //validate request
-            //Validation için eğer apicontroller'ı silersek parametre bölümüne [FromBody]eklenmeli daha sonra hata mesajı verdirmek için
-            //If(!ModelState.IsValid)
-            //  return BadRequest(ModelState);  
+            if(await _userManager.Users.AnyAsync((x=> x.Email == userForRegisterDto.Email)))
+            {
+                return BadRequest("You already registered to datingapp");
+            }
             var userToCreate = _mapper.Map<User>(userForRegisterDto);//destination-source
-            var result= await _userManager.CreateAsync(userToCreate,userForRegisterDto.Password);
+            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
             var usertoReturn = _mapper.Map<UserForDetailedDto>(userToCreate);
-            if(result.Succeeded){
+            if (result.Succeeded)
+            {
                 return CreatedAtRoute("GetUser", new { Controller = "Users", id = userToCreate.Id }, usertoReturn);//StatusCode(201)--basarılı old mesaj
             }
             return BadRequest(result.Errors);
+            // return BadRequest("Email code is not matching.");
         }
-        [HttpPost("login")]
+        [HttpPost("getEmail")]
+        public async Task<IActionResult> GetEmail(EmailDto emailDto)
+        {
+            Random random = new Random();
+            int number = random.Next(100000, 999999);
+            MailService.SendMail("Confirmation Mail", emailDto.Email, "Code: <br>" + number);
+            return Ok();
+        }
+        /*[HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
                 var user = await _userManager.FindByNameAsync(userForLoginDto.Username);
@@ -90,6 +102,6 @@ namespace DatingApp.API.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
+        }*/
     }
 }

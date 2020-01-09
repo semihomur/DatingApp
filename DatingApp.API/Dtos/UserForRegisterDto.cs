@@ -10,6 +10,10 @@ namespace DatingApp.API.Dtos
         [StringLength(12,MinimumLength=6,ErrorMessage="You must specify password between 6 and 12")]
         public string Password { get; set; }
         [Required]
+        public string Email { get; set; }
+        [Required]
+        public int EmailCode { get; set; }
+        [Required]
         public string Gender {get;set;}
         [Required]
         public string KnownAs {get;set;}
