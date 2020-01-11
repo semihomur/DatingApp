@@ -60,5 +60,10 @@ namespace DatingApp.API.Data
                 return true;
             return false;
         }
+
+        public Task<EmailCode> GetEmailCode(string email)
+        {
+            return context.EmailCodes.FirstOrDefaultAsync(x=> x.Email == email);
+        }
     }
 }

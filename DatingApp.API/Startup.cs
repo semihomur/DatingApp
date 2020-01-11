@@ -88,6 +88,7 @@ namespace DatingApp.API
             Mapper.Reset();
             services.AddAutoMapper();
             services.AddTransient<Seed>();
+            services.AddScoped<IAuthRepository,AuthRepository>();
             services.AddScoped<IDatingRepository,DatingRepository>();
             //Aynı httpler için aynısını kullanır
             //AddTransient-lightweight her zaman yeni bir service yaratıyor classların kullanabilmesi için

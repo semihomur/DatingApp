@@ -28,10 +28,12 @@ namespace DatingApp.API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IDatingRepository _repo;
+        private readonly IAuthRepository _authRepo;
 
-        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, IDatingRepository repo)
+        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, IDatingRepository repo, IAuthRepository authRepo)
         {
             _repo = repo;
+            _authRepo = authRepo;
             _signInManager = signInManager;
             _userManager = userManager;
             _mapper = mapper;
@@ -40,18 +42,26 @@ namespace DatingApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            if(await _userManager.Users.AnyAsync((x=> x.Email == userForRegisterDto.Email)))
+            if(await _userManager.Users.AnyAsync(x=> (x.Email == userForRegisterDto.Email || (x.UserName == userForRegisterDto.Username))))
             {
                 return BadRequest("You already registered to datingapp");
             }
-            var userToCreate = _mapper.Map<User>(userForRegisterDto);//destination-source
-            var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
-            var usertoReturn = _mapper.Map<UserForDetailedDto>(userToCreate);
-            if (result.Succeeded)
-            {
-                return CreatedAtRoute("GetUser", new { Controller = "Users", id = userToCreate.Id }, usertoReturn);//StatusCode(201)--basarılı old mesaj
+            var emailCode = await _authRepo.GetEmailCode(userForRegisterDto.Email);
+            if( userForRegisterDto.EmailCode == emailCode.Code) {
+                _repo.Delete(emailCode);
+                var userToCreate = _mapper.Map<User>(userForRegisterDto);//destination-source
+                var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
+                var usertoReturn = _mapper.Map<UserForDetailedDto>(userToCreate);
+                if (result.Succeeded)
+                {
+                    await _repo.SaveAll();
+                    return CreatedAtRoute("GetUser", new { Controller = "Users", id = userToCreate.Id }, usertoReturn);//StatusCode(201)--basarılı old mesaj
+                }
+                return BadRequest(result.Errors);
             }
-            return BadRequest(result.Errors);
+            else {
+                return BadRequest("Not correct email code");
+            }
             // return BadRequest("Email code is not matching.");
         }
         [HttpPost("getEmail")]
@@ -60,7 +70,14 @@ namespace DatingApp.API.Controllers
             Random random = new Random();
             int number = random.Next(100000, 999999);
             MailService.SendMail("Confirmation Mail", emailDto.Email, "Code: <br>" + number);
-            return Ok();
+            var emailCode = new EmailCode() {
+                Email = emailDto.Email,
+                Code = number
+            };
+            _repo.Add(emailCode);
+             if(await _repo.SaveAll())
+                return Ok();
+            return BadRequest("Failed to send the code");
         }
         /*[HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)

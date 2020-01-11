@@ -14,7 +14,7 @@ namespace DatingApp.API.Helpers
         {
             MailMessage msg = new MailMessage();
             msg.Subject = subject;
-            msg.From = new MailAddress("MAIL", "DatingApp");
+            msg.From = new MailAddress("asdasdkjqn23@gmail.com", "DatingApp");
             msg.To.Add(new MailAddress(email));
             msg.Body = CreateBody(subject,content);
             msg.IsBodyHtml = true;
@@ -22,7 +22,7 @@ namespace DatingApp.API.Helpers
             // Host ve Port Gereklidir!
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
             // Güvenli bağlantı gerektiğinden kullanıcı adı ve şifrenizi giriniz.
-            NetworkCredential AccountInfo = new NetworkCredential("MAIL", "PASSWORD");
+            NetworkCredential AccountInfo = new NetworkCredential("asdasdkjqn23@gmail.com", "2511675ss1");
             smtp.UseDefaultCredentials = false;
             smtp.Credentials = AccountInfo;
             smtp.EnableSsl = true;
