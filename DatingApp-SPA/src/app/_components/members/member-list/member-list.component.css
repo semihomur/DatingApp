@@ -1,0 +1,13 @@
+@media only screen and (max-width: 575px) {
+  .btn-group {
+    float: none !important;
+}
+.form-group {
+    width: 33%;
+}
+}
+@media only screen and (max-width: 991px) {
+  .form-group {
+      width: 33%;
+  }
+  }
