@@ -12,7 +12,6 @@
     border-top: none;
      
 }.wrapper {
-    display: inline-block;
     height: 150px;
     width: 250px;
     padding: 5px;
