@@ -14,3 +14,6 @@ img  {
   .dropdown {
       margin: auto;
   }
+  .navbar-collapse {
+      flex-grow:0;
+  }

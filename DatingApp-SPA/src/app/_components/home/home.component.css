@@ -5,7 +5,6 @@
     width: 100%;
     height: 94.2vh;
     background: url(../../../assets/bonding-cold-cozy-dog-374845.jpg);
-    
     background-size: cover;
     background-attachment: fixed;
 }
@@ -57,3 +56,63 @@ section .wave:after {
         background-position: 0;
     }
 }
+.flip-wrap {
+    position: relative;
+	z-index: 8888;
+	height: 200px;
+	width: 100%;
+    text-align: center;
+}
+.flip-card {
+    background-color: transparent;
+    width: 25%;
+    height: 100%;
+    perspective: 1000px;
+    display: inline-block;
+    margin-right:15px;
+  }
+  
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    
+  }
+  
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    opacity: 0.9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .flip-card-front {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .flip-card-back {
+    background-color: #e74c3c;
+    color: white;
+    transform: rotateY(180deg);
+  }
+  .flip-card-content {
+      font-size: 2.5vh;
+  }
+  .flip-card-icon {
+      font-size: 5vh;
+  }
