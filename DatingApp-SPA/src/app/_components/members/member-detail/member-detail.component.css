@@ -1,5 +1,5 @@
 .img-thumbnail {
-    margin:25px;
+    margin:1.2rem;
     width:85%;
     height: 85%;
 }
@@ -11,11 +11,25 @@
     background-color: #fff;
     border-top: none;
      
-}.wrapper {
-    height: 150px;
-    width: 250px;
-    padding: 5px;
-    margin: 5px;
-    background: lightgray;
-  }
-  
+}
+@media only screen and (max-width: 992px) {
+    ngx-gallery {
+        width:400px !important;
+        height:400px !important;
+    }
+}
+@media only screen and (max-width: 768px) {
+    ngx-gallery {
+        width:300px !important;
+        height: 300px !important;
+    }
+}
+@media only screen and (max-width: 575px) {
+    ngx-gallery {
+        width:100% !important;
+        height: 100vh !important;
+    }
+}
+.btn-group .btn {
+    min-width: 30px;
+}
