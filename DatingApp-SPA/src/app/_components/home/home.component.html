@@ -1,5 +1,5 @@
   <section>
-<div class="pt-5">
+<div class="pt-4">
       <div class="text-center" *ngIf="!registerMode">
       <h1 style="color: white;">Find your match</h1>
       <p *ngIf="!authService.loggedIn()" class="lead">Come on in to view your matches... All you need to do is sign up!</p>
@@ -27,7 +27,7 @@
       </div>
     </div>  
 </div>
-<div class="flip-wrap mt-5">
+<div class="flip-wrap mt-5" *ngIf="!registerMode">
   <div class="flip-card">
     <div class="flip-card-inner">
       <div class="flip-card-front">
@@ -53,7 +53,7 @@
     </div>
   </div>
 </div>
-    <div class="wave">
+    <div class="wave" *ngIf="!registerMode"> 
     </div>
   </section>
   
