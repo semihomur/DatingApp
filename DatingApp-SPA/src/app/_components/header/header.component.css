@@ -17,3 +17,125 @@ img  {
   .navbar-collapse {
       flex-grow:0;
   }
+.dropdown-item:focus {
+    background: #eee;
+    color:#000;
+}
+.iconWrapper {
+    z-index: 5;
+}
+.one,
+.two,
+.three {
+  transform-origin: center;
+}
+
+.one {
+  animation: firstLineShow 0.5s ease-in-out;
+}
+
+.two {
+  animation: secondLineReverse 0.5s ease-in-out;
+}
+
+.three {
+  animation: thirdLineShow 0.5s ease-in-out;
+}
+.open .one {
+    transform: rotate(45deg) translate(8px, 38px);
+    animation: firstLineAnimation 0.5s ease-in-out;
+}
+.open .two {
+    transform: scale(0);
+    animation: secondLineAnimation 0.5s ease-in-out;
+}
+.open .three {
+    transform: rotate(135deg) translate(15px, 0);
+        animation: thirdLineHide 0.5s ease-in-out;
+}
+@keyframes firstLineAnimation {
+    0% {
+      transform: rotate(0deg) translateY(0);
+    }
+  
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+  
+    100% {
+      transform: rotate(45deg) translate(8px, 38px);
+    }
+  }
+  
+  @keyframes firstLineShow {
+    0% {
+      transform: rotate(45deg) translate(8px, 38px);
+    }
+  
+    50% {
+      transform: rotate(0deg) translateY(0);
+    }
+  
+    100% {
+      transform: rotate(0deg) translateY(0);
+    }
+  }
+  
+  @keyframes secondLineAnimation {
+    0% {
+      transform: scale(1);
+    }
+  
+    50%,
+    100% {
+      transform: scale(0);
+    }
+  }
+  
+  @keyframes secondLineReverse {
+    0%,
+    50% {
+      transform: scale(0);
+    }
+  
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes thirdLineShow {
+    0% {
+      transform: rotate(135deg) translate(15px, 0);
+    }
+  
+    50% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  @keyframes thirdLineHide {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    50% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(135deg) translate(15px, 0);
+    }
+  }
+svg {
+    width: 40px;
+    fill: #fff;
+    transform-origin: center;
+    padding-top: 15px;
+}
+.navbar-toggler {
+    border: none;
+}

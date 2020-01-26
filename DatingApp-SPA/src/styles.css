@@ -4,6 +4,10 @@
 @import '../node_modules/alertifyjs/build/css/alertify.min.css';
 @import '../node_modules/alertifyjs/build/css/themes/bootstrap.min.css';
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+button:focus {
+  outline: none !important;
+  box-shadow:none !important;
+}
 
 .tab-panel {
     border: 1px solid #ddd;

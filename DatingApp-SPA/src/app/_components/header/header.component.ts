@@ -40,4 +40,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/']);
     this.authService.logout();
   }
+  toggleButton() {
+    document.querySelector('.iconWrapper').classList.toggle('open');
+    document.querySelector('rect').classList.remove('disableAnimation');
+  }
 }
