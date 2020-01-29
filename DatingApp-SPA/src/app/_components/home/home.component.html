@@ -28,30 +28,32 @@
     </div>  
 </div>
 <div class="flip-wrap mt-5" *ngIf="!registerMode">
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <i class="fa fa-user flip-card-icon"></i>
-        <p class="flip-card-content">Sign up & fill your profile information</p>
-      </div>
-      <div class="flip-card-back">
-        <i class="fa fa-heart flip-card-icon"></i>
-        <p class="flip-card-content">Take a closer look and send likes</p> 
-      </div>
-    </div>
-  </div>
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <i class="fa fa-envelope flip-card-icon"></i>
-        <p class="flip-card-content">Matched with other and say hi</p>
-      </div>
-      <div class="flip-card-back">
-        <i class="fa fa-beer flip-card-icon"></i>
-        <p class="flip-card-content">Cheers</p> 
+  <div *ngIf="!authService.loggedIn()">
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <i class="fa fa-user flip-card-icon"></i>
+          <p class="flip-card-content">Sign up & fill your profile information</p>
+        </div>
+        <div class="flip-card-back">
+          <i class="fa fa-heart flip-card-icon"></i>
+          <p class="flip-card-content">Take a closer look and send likes</p> 
+        </div>
       </div>
     </div>
-  </div>
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <i class="fa fa-envelope flip-card-icon"></i>
+          <p class="flip-card-content">Matched with other and say hi</p>
+        </div>
+        <div class="flip-card-back">
+          <i class="fa fa-beer flip-card-icon"></i>
+          <p class="flip-card-content">Cheers</p> 
+        </div>
+      </div>
+    </div>
+  </div> 
 </div>
     <div class="wave" *ngIf="!registerMode"> 
     </div>
