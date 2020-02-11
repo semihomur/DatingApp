@@ -14,6 +14,7 @@ namespace DatingApp.API.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Messages> Messages { get; set; }
         public DbSet<EmailCode> EmailCodes { get; set; }
+        public DbSet<PhoneNumberCode> PhoneNumberCodes {get;set;}
         public DbSet<TokenModel> Tokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {

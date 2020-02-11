@@ -91,4 +91,8 @@ logout() {
     const emailObj = {email};
     return this.http.post(this.baseUrl + 'getEmail', emailObj);
   }
+  SendPhoneCode(phoneNumber: string) {
+    const phoneObj = {phoneNumber};
+    return this.http.post(this.baseUrl + 'getPhoneCode', phoneObj);
+  }
 }

@@ -27,12 +27,10 @@ namespace DatingApp.API.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IDatingRepository _repo;
         private readonly IAuthRepository _authRepo;
 
-        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, IDatingRepository repo, IAuthRepository authRepo)
+        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, IMapper mapper, IAuthRepository authRepo)
         {
-            _repo = repo;
             _authRepo = authRepo;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -42,27 +40,28 @@ namespace DatingApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            if(await _userManager.Users.AnyAsync(x=> (x.Email == userForRegisterDto.Email || (x.UserName == userForRegisterDto.Username))))
+            if(await _userManager.Users.AnyAsync(x=> (x.Email == userForRegisterDto.Email || (x.UserName == userForRegisterDto.Username) || (x.PhoneNumber == userForRegisterDto.PhoneNumber))))
             {
                 return BadRequest("You already registered to datingapp");
             }
             var emailCode = await _authRepo.GetEmailCode(userForRegisterDto.Email);
-            if( userForRegisterDto.EmailCode == emailCode.Code) {
-                _repo.Delete(emailCode);
+            var phoneNumberCode = await _authRepo.GetPhoneNumberCode(userForRegisterDto.PhoneNumber);
+            if( userForRegisterDto.EmailCode == emailCode.Code && userForRegisterDto.PhoneNumberCode == phoneNumberCode.Code) {
+                _authRepo.Delete(emailCode);
+                _authRepo.Delete(phoneNumberCode);
                 var userToCreate = _mapper.Map<User>(userForRegisterDto);//destination-source
                 var result = await _userManager.CreateAsync(userToCreate, userForRegisterDto.Password);
                 var usertoReturn = _mapper.Map<UserForDetailedDto>(userToCreate);
                 if (result.Succeeded)
                 {
-                    await _repo.SaveAll();
+                    await _authRepo.SaveAll();
                     return CreatedAtRoute("GetUser", new { Controller = "Users", id = userToCreate.Id }, usertoReturn);//StatusCode(201)--basarılı old mesaj
                 }
                 return BadRequest(result.Errors);
             }
             else {
-                return BadRequest("Not correct email code");
+                return BadRequest("Not correct email or phone code");
             }
-            // return BadRequest("Email code is not matching.");
         }
         [HttpPost("getEmail")]
         public async Task<IActionResult> GetEmail(EmailDto emailDto)
@@ -74,8 +73,23 @@ namespace DatingApp.API.Controllers
                 Email = emailDto.Email,
                 Code = number
             };
-            _repo.Add(emailCode);
-             if(await _repo.SaveAll())
+            _authRepo.Add(emailCode);
+             if(await _authRepo.SaveAll())
+                return Ok();
+            return BadRequest("Failed to send the code");
+        }
+        [HttpPost("getPhoneCode")]
+        public async Task<IActionResult> GetPhoneCode(PhoneDto phoneDto)
+        {
+            Random random= new Random();
+            int sayi = random.Next(100000,999999);
+            var phoneCode = new PhoneNumberCode() {
+                PhoneNumber = phoneDto.PhoneNumber,
+                Code = sayi
+            };
+            PhoneService.Send(phoneDto.PhoneNumber, sayi);
+            _authRepo.Add(phoneCode);
+             if(await _authRepo.SaveAll())
                 return Ok();
             return BadRequest("Failed to send the code");
         }

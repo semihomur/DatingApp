@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
                                 console.log('Token expired. Attemtping refresh');
                                 return this.HandleHttpResponseError(request, next);
                             case 400:
-                                return Observable.throw(err);
+                                return throwError(err);
                         }
                     } else {
                         return throwError(this.HandleError);

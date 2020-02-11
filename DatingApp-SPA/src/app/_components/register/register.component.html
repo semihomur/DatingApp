@@ -1,4 +1,4 @@
-<form [formGroup]="registerForm" (ngSubmit)="register()">
+<form [formGroup]="registerForm" (ngSubmit)="register()" class="w-100">
   <h2 class="text-center text-primary">Sign Up</h2>
   <hr>
   <div class="form-group">
@@ -32,6 +32,18 @@
     <input [ngClass]="{'is-invalid': registerForm.get('emailCode').errors && registerForm.get('emailCode').touched}" class="form-control"
      placeholder="Email Code" formControlName="emailCode">
     <div class="invalid-feedback" *ngIf="registerForm.get('emailCode').touched && registerForm.get('emailCode').hasError('required')">Email code as is required</div>
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control d-inline-block w-75" [ngClass]="{'is-invalid': registerForm.get('phoneNumber').errors && registerForm.get('phoneNumber').touched}" formControlName="phoneNumber" placeholder="Phone Number">
+    <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').touched && registerForm.get('phoneNumber').hasError('required')">Phone number is required</div>
+    <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').hasError('minlength')">Password must be at least 10 characters </div>
+    <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').hasError('maxlength')">Password can not exceed 12 characters </div>
+    <button class="btn btn-info w-25" type="button" [disabled]="registerForm.get('phoneNumber').hasError('required') || registerForm.get('phoneNumber').hasError('minlength') || registerForm.get('phoneNumber').hasError('maxlength')" (click)="SendPhoneCode()">Get Code</button>
+  </div>
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': registerForm.get('phoneNumberCode').errors && registerForm.get('phoneNumberCode').touched}" class="form-control"
+     placeholder="Phone Number Code" formControlName="phoneNumberCode">
+    <div class="invalid-feedback" *ngIf="registerForm.get('phoneNumberCode').touched && registerForm.get('phoneNumberCode').hasError('required')">Phone Number code as is required</div>
   </div>
   <div class="form-group">
     <input [ngClass]="{'is-invalid': registerForm.get('knownAs').errors && registerForm.get('knownAs').touched}" class="form-control"

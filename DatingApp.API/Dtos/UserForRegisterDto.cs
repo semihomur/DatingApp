@@ -13,6 +13,9 @@ namespace DatingApp.API.Dtos
         public string Email { get; set; }
         [Required]
         public int EmailCode { get; set; }
+        public string PhoneNumber { get; set; }
+        [Required]
+        public int PhoneNumberCode { get; set; }
         [Required]
         public string Gender {get;set;}
         [Required]

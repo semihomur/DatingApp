@@ -28,14 +28,16 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       gender: ['male'],
       username: [null, Validators.required],
-      email: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(30), Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+      email: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(35), Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
       emailCode: [null, [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
       knownAs: [null, Validators.required],
       dateOfBirth: [null, Validators.required],
       city: [null, Validators.required],
       country: [null, Validators.required],
       password : [null, [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
-      confirmPassword : [null, [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
+      confirmPassword : [null, [Validators.required, Validators.minLength(6), Validators.maxLength(12)]],
+      phoneNumber: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(13)]],
+      phoneNumberCode: [null, [Validators.required, Validators.maxLength(6), Validators.minLength(6)]]
     }, {validator : this.passwordMatchValidator});
   }
   passwordMatchValidator(g: FormGroup) {
@@ -47,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.authService.register(this.user).subscribe(response => {
       this.alertify.success('Registration successful');
     }, error => {
-      // this.alertify.error(error.error);
+       this.alertify.error(error.error);
     }, () => {
       this.authService.login(this.user).subscribe(() => {
         this.router.navigate(['/members']);
@@ -62,6 +64,15 @@ export class RegisterComponent implements OnInit {
   SendCode() {
     this.authService.SendCode(this.registerForm.controls.email.value).subscribe(() => {
       this.alertify.success('Email sent');
+    }, (error) => {
+      this.alertify.error(error.error);
+    });
+  }
+  SendPhoneCode() {
+    this.authService.SendPhoneCode(this.registerForm.controls.phoneNumber.value).subscribe(() => {
+      this.alertify.success('Phone code sent');
+    }, (error) => {
+      this.alertify.error(error.error);
     });
   }
 
