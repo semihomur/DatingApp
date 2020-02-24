@@ -26,7 +26,7 @@
     <input type="text" class="form-control d-inline-block w-75" [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" formControlName="email" placeholder="Email">
     <div class="invalid-feedback float-left" *ngIf="registerForm.get('email').touched && registerForm.get('email').hasError('required')">Email is required</div>
     <div class="invalid-feedback float-left" *ngIf="registerForm.get('email').errors?.pattern && registerForm.get('email').touched">Email type is not correct</div>
-    <button class="btn btn-info w-25" type="button" disableButton [disabled]="registerForm.get('email').hasError('required') || registerForm.get('email').errors?.pattern" (click)="SendCode()">Get Code</button>
+    <button class="btn btn-info w-25" type="button" disableButton="20" [disabled]="registerForm.get('email').hasError('required') || registerForm.get('email').errors?.pattern" (click)="SendCode()">Get Code</button>
   </div>
   <div class="form-group">
     <input [ngClass]="{'is-invalid': registerForm.get('emailCode').errors && registerForm.get('emailCode').touched}" class="form-control"
@@ -38,7 +38,7 @@
     <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').touched && registerForm.get('phoneNumber').hasError('required')">Phone number is required</div>
     <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').hasError('minlength')">Password must be at least 10 characters </div>
     <div class="invalid-feedback float-left" *ngIf="registerForm.get('phoneNumber').hasError('maxlength')">Password can not exceed 12 characters </div>
-    <button class="btn btn-info w-25" type="button" disableButton [disabled]="registerForm.get('phoneNumber').hasError('required') || registerForm.get('phoneNumber').hasError('minlength') || registerForm.get('phoneNumber').hasError('maxlength')" (click)="SendPhoneCode()">Get Code</button>
+    <button class="btn btn-info w-25" type="button" disableButton="20" [disabled]="registerForm.get('phoneNumber').hasError('required') || registerForm.get('phoneNumber').hasError('minlength') || registerForm.get('phoneNumber').hasError('maxlength')" (click)="SendPhoneCode()">Get Code</button>
   </div>
   <div class="form-group">
     <input [ngClass]="{'is-invalid': registerForm.get('phoneNumberCode').errors && registerForm.get('phoneNumberCode').touched}" class="form-control"

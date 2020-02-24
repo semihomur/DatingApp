@@ -1,9 +1,10 @@
-import { Directive, ElementRef, Renderer2, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, Renderer2, HostListener, OnInit, Input } from '@angular/core';
 
 @Directive({
   selector: '[disableButton]'
 })
 export class DisableButtonDirective implements OnInit {
+  @Input() disableButton: number;
   constructor(private elRef: ElementRef, private renderer: Renderer2) { }
   ngOnInit() {
     if (Number(new Date().getTime() / 1000) > Number(localStorage.getItem('approveTime'))) {
@@ -17,10 +18,9 @@ export class DisableButtonDirective implements OnInit {
   }
   @HostListener('click')
   DisableButton() {
-    const numbers = 20;
-    localStorage.setItem('approveTime', ((new Date().getTime() / 1000) + numbers).toString());
+    localStorage.setItem('approveTime', ((new Date().getTime() / 1000) + this.disableButton).toString());
     this.renderer.setProperty(this.elRef.nativeElement, 'disabled', 'true');
-    this.SetInterval(numbers);
+    this.SetInterval(this.disableButton);
   }
   SetInterval(numbers) {
     const innerText = this.elRef.nativeElement.innerText;
