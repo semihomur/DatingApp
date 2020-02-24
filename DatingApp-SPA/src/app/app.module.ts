@@ -8,7 +8,6 @@ import { TimeAgoPipe} from 'time-ago-pipe';
 import { NgxGalleryModule} from 'ngx-gallery';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './_components/header/header.component';
-import { JwtModule } from '@auth0/angular-jwt';
 import { AuthService } from './_services/auth.service';
 import { HomeComponent } from './_components/home/home.component';
 import { RegisterComponent } from './_components/register/register.component';
@@ -41,6 +40,7 @@ import { RolesModalComponent } from './_components/admin/roles-modal/roles-modal
 import { FilterStringPipe } from './_pipe/filterString.pipe';
 import { AuthInterceptor } from './_guard/auth.interceptor';
 import { FooterComponent } from './_components/footer/footer.component';
+import { DisableButtonDirective } from './_directives/disable-button.directive';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -66,7 +66,8 @@ export function tokenGetter() {
       PhotoManagementComponent,
       RolesModalComponent,
       FilterStringPipe,
-      FooterComponent
+      FooterComponent,
+      DisableButtonDirective
    ],
    imports: [
       BrowserModule,
