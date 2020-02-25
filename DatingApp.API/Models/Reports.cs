@@ -8,5 +8,6 @@ namespace DatingApp.API.Models
         public int ReportedUserId { get; set; }
         public User ReportedUser { get; set; }
         public string Reason { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

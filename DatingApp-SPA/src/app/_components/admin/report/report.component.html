@@ -1,0 +1,18 @@
+<div class="row">
+  <table class="table">
+    <tr>
+      <th style="width: 10%;">Report Id</th>
+      <th style="width: 15%;">Reporter Username</th>
+      <th style="width: 15%;">Roperted Username</th>
+      <th style="width: 50%;">Reason</th>
+      <th style="width: 10%;">InActive</th>
+    </tr>
+    <tr *ngFor="let report of reports">
+      <td>{{report.id}}</td>
+      <td>{{report.reporter.username}}</td>
+      <td>{{report.reportedUser.username}}</td>
+      <td>{{report.reason}}</td>
+      <td><button class="btn btn-sm btn-danger" (click)="InActivate(report.id)">Inactivate</button></td>
+    </tr>
+  </table>
+</div>

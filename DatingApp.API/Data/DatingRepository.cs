@@ -57,7 +57,7 @@ namespace DatingApp.API.Data
 
         public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users= _context.Users.Include(p=>p.Photos).Where(u=> u.Id !=userParams.UserId).Where(u=>u.Gender==userParams.Gender).OrderByDescending(u => u.LastActive).AsQueryable();
+            var users= _context.Users.Include(p=>p.Photos).Where(u=> u.Id !=userParams.UserId).Where(u=>u.Gender==userParams.Gender && !u.InActive).OrderByDescending(u => u.LastActive).AsQueryable();
             if(userParams.Likers) {
                 var userLikers= await GetUserLikes(userParams.UserId,userParams.Likers);
                 users = users.Where(u=> userLikers.Contains(u.Id));

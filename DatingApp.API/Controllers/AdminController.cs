@@ -13,6 +13,8 @@ using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
 using DatingApp.API.Helpers;
 using CloudinaryDotNet;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace DatingApp.API.Controllers
 {
@@ -101,6 +103,26 @@ namespace DatingApp.API.Controllers
             if (!result.Succeeded)
                 return BadRequest("Failed to remove the roles");
             return Ok(await _userManager.GetRolesAsync(user));
+        }
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpGet("getReports")]
+        public async Task<IActionResult> GetReports() {
+            var getReports = await _context.Reports.Include(r=> r.ReportedUser).Include(r=> r.Reporter).Where(r=> !r.IsDeleted).ToListAsync();
+            var getReportsToReturn = _mapper.Map<ICollection<ReportReturnDto>>(getReports);
+            return Ok(getReportsToReturn);
+        }
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpPut("inActivateUser/{reportId}")]
+        public async Task<IActionResult> MakeInActivate(int reportId) {
+            var report =await  _context.Reports.FirstOrDefaultAsync(r=> r.Id == reportId);  
+            if (report == null) {
+                return BadRequest();
+            }
+            report.IsDeleted = true;
+            var user = await _context.Users.FirstOrDefaultAsync(u=> u.Id == report.ReportedUserId);
+            user.InActive = true;
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

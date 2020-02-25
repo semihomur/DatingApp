@@ -69,6 +69,9 @@ namespace DatingApp.API.Controllers
                 await _context.SaveChangesAsync();
                 var accessToken = await CreateAccesToken(user, newRToken.Value);
                 var appUser = await _userManager.Users.Include(p=> p.Photos).FirstOrDefaultAsync(u=>u.UserName == model.Username);
+                if(appUser.InActive) {
+                    return BadRequest("Account suspended");
+                }
                 var userForReturn = _mapper.Map<UserForListDto>(appUser);
                 return Ok(new {
                     authToken = accessToken,

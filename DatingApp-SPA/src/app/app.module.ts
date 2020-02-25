@@ -41,6 +41,7 @@ import { FilterStringPipe } from './_pipe/filterString.pipe';
 import { AuthInterceptor } from './_guard/auth.interceptor';
 import { FooterComponent } from './_components/footer/footer.component';
 import { DisableButtonDirective } from './_directives/disable-button.directive';
+import { ReportComponent } from './_components/admin/report/report.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -67,7 +68,8 @@ export function tokenGetter() {
       RolesModalComponent,
       FilterStringPipe,
       FooterComponent,
-      DisableButtonDirective
+      DisableButtonDirective,
+      ReportComponent
    ],
    imports: [
       BrowserModule,
