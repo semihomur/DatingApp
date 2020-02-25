@@ -4,14 +4,16 @@ using DatingApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200225161220_reported")]
+    partial class reported
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,13 +130,13 @@ namespace DatingApp.API.Migrations
 
                     b.Property<string>("Reason");
 
-                    b.Property<int>("ReportedUserId");
+                    b.Property<int>("ReportedId");
 
                     b.Property<int>("ReporterId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReportedUserId");
+                    b.HasIndex("ReportedId");
 
                     b.HasIndex("ReporterId");
 
@@ -390,7 +392,7 @@ namespace DatingApp.API.Migrations
                 {
                     b.HasOne("DatingApp.API.Models.User", "ReportedUser")
                         .WithMany("ReportsReceived")
-                        .HasForeignKey("ReportedUserId")
+                        .HasForeignKey("ReportedId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DatingApp.API.Models.User", "Reporter")

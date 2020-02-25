@@ -26,6 +26,10 @@
             <button class="btn btn-primary w-100" (click)="sendLike(user?.id)">Like</button>
             <button class="btn btn-success w-100" (click)="selectTab(3)">Message</button>
           </div>
+          <div *ngIf="!reportExist">
+            <textarea rows="3" class="form-control mt-2" [(ngModel)]="complain" *ngIf="showTextareaForComplain"></textarea>
+          <button class="btn btn-danger w-100 mt-2" (click)="InformAgainst()">Inform Against</button>
+          </div>
         </div>
       </div>
     </div>

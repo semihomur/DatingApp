@@ -94,4 +94,7 @@ constructor(private http: HttpClient) { }
   markAsRead(id: number, userId: number) {
     return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id + '/read', {}).subscribe();
   }
+  complain(userId: number, reportedUser: number, reasonForReport: string) {
+    return this.http.post(this.baseUrl + 'users/' + userId + '/reported/' + reportedUser , {reasonForReport});
+  }
 }

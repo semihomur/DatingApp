@@ -23,6 +23,8 @@ namespace DatingApp.API.Models
         public ICollection<Like> Likees { get; set; }
         public ICollection<Messages> MessagesSent { get; set; }
         public ICollection<Messages> MessagesReceived { get; set; }
+        public ICollection<Reports> ReportsSent { get; set; }
+        public ICollection<Reports> ReportsReceived { get; set; }
         public ICollection<UserRole> UserRoles  { get; set; }
         public virtual List<TokenModel> Tokens {get;set;}
 

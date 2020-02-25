@@ -16,6 +16,9 @@ export class MemberDetailComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  showTextareaForComplain: boolean;
+  reportExist: boolean;
+  complain: string;
   @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   constructor(private userService: UserService,
               private alertify: AlertifyService,
@@ -25,7 +28,8 @@ export class MemberDetailComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       // tslint:disable-next-line:no-string-literal
-      this.user = data['user'];
+      this.user = data.user.userToReturn;
+      this.reportExist = data.user.reportExist;
     });
     this.route.queryParams.subscribe(params => {
       // tslint:disable-next-line:no-string-literal
@@ -76,6 +80,18 @@ export class MemberDetailComponent implements OnInit {
     }, error => {
       this.alertify.error('You already liked this user');
     });
+  }
+  InformAgainst() {
+    if (!this.showTextareaForComplain) {
+      this.showTextareaForComplain = !this.showTextareaForComplain;
+    } else {
+      this.userService.complain(this.authService.decodedToken.nameid, this.user.id, this.complain).subscribe(() => {
+        this.alertify.success('Complain is sent to Editor');
+        this.reportExist = true;
+      }, (err) => {
+        this.alertify.error(err.error);
+      });
+    }
   }
 
 }

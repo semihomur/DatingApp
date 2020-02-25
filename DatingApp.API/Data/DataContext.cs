@@ -12,6 +12,7 @@ namespace DatingApp.API.Data
         public DataContext(DbContextOptions<DataContext> options):base(options){}
         public DbSet<Photo> Photos  { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Reports> Reports { get; set; }
         public DbSet<Messages> Messages { get; set; }
         public DbSet<EmailCode> EmailCodes { get; set; }
         public DbSet<PhoneNumberCode> PhoneNumberCodes {get;set;}
@@ -43,7 +44,16 @@ namespace DatingApp.API.Data
                 .WithMany(u=>u.Likees)
                 .HasForeignKey(u => u.LikerId)
                 .OnDelete(DeleteBehavior.Restrict);
-
+            builder.Entity<Reports>()
+                .HasOne(u=>u.Reporter)
+                .WithMany(u=>u.ReportsSent)
+                .HasForeignKey(u=>u.ReporterId)
+                .OnDelete(DeleteBehavior.Restrict);
+                builder.Entity<Reports>()
+                .HasOne(u=>u.ReportedUser)
+                .WithMany(u=>u.ReportsReceived)
+                .HasForeignKey(u=>u.ReportedUserId)
+                .OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Messages>()
                 .HasOne(u=>u.Sender)
                 .WithMany(u=>u.MessagesSent)

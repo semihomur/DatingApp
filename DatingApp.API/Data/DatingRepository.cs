@@ -126,5 +126,12 @@ namespace DatingApp.API.Data
                 .OrderByDescending(m=>m.SendDate).ToListAsync();
             return messages;
         }
+
+        public async Task<bool> ReportsExist(int userId, int reportedUserId)
+        {
+            if (await _context.Reports.AnyAsync(x => x.ReportedUserId == reportedUserId && x.ReporterId == userId))
+                return true;
+            return false;
+        }
     }
 }

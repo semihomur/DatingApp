@@ -48,7 +48,12 @@ namespace DatingApp.API.Controllers
                 user = await _repo.GetMe(id);
             }
             var userToReturn = _mapper.Map<UserForDetailedDto>(user);
-            return Ok(userToReturn);
+            var reportExist = await _repo.ReportsExist(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), user.Id);
+            return Ok(new {
+                userToReturn,
+                reportExist
+
+            });
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdate) {
@@ -84,6 +89,30 @@ namespace DatingApp.API.Controllers
             if(await _repo.SaveAll())
                 return Ok();
             return BadRequest("Failed to like this user");
+        }
+        [HttpPost("{id}/reported/{reportedUser}")]
+        public async Task<IActionResult> ReportUser(int id, int reportedUser, ReportedUserDto reason) {
+           if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+                return Unauthorized();
+            }
+            var reported =await _repo.GetUser(reportedUser);
+            var reporter = await _repo.GetUser(id);
+            if (reported == null) {
+                return BadRequest("User could not find");
+            }
+            if(await _repo.ReportsExist(id, reportedUser)) {
+                return BadRequest("User has been reported before");
+            }
+            Reports newReports = new Reports{
+                ReportedUser = reported,
+                Reporter = reporter,
+                Reason = reason.ReasonForReport,
+
+            };
+            _repo.Add<Reports>(newReports);
+            if(await _repo.SaveAll())
+                return Ok();
+            return BadRequest("Failed to report");
         }
     }
 }
