@@ -1,0 +1,23 @@
+<div class="container">
+  <h3 class="text-center mt-5">Statistics</h3>
+  <div class="row" *ngIf="staticts">
+    <div class="col-sm-4" [@divAnimation]="state" (mouseenter)="MouseEnterLeave(1)" (mouseleave)="MouseEnterLeave(1)">
+      <div class="mt-5 card chartContainer turquoise">
+        <h4 class="text-center">Total User</h4>
+        <app-donut-chart label="Total User" [amount]="staticts.totalUser" ></app-donut-chart>
+      </div>
+    </div>
+    <div class="col-sm-4" [@divAnimation]="state2" (mouseenter)="MouseEnterLeave(2)" (mouseleave)="MouseEnterLeave(2)">
+      <div class="mt-5 card belizehole">
+        <h4 class="text-center">Total Likes</h4>
+        <app-donut-chart label="Total Likes" [amount]="staticts.totalLikes" ></app-donut-chart>
+      </div>
+    </div>
+    <div class="col-sm-4" [@divAnimation]="state3" (mouseenter)="MouseEnterLeave(3)" (mouseleave)="MouseEnterLeave(3)">
+      <div class="mt-5 card amethyst">
+        <h4 class="text-center" style="font-size: 1.2rem;">Total Photo Uploaded</h4>
+        <app-donut-chart label="Total Photo Uploaded" [amount]="staticts.totalPhotoUploaded" ></app-donut-chart>
+      </div>
+    </div>
+  </div>
+</div>

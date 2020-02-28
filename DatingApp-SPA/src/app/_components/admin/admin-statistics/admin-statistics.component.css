@@ -1,0 +1,17 @@
+.turquoise {
+    border-top: 2px solid #1abc9c;
+}  
+.belizehole {
+    border-top: 2px solid #2980b9;
+}  
+
+.amethyst {
+    border-top: 2px solid #9b59b6;
+} 
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    padding: 1rem;
+    background: white;
+  }
+  

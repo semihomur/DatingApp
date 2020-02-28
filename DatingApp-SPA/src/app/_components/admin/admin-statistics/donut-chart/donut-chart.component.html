@@ -1,0 +1,10 @@
+<div style="display: block">
+  <canvas baseChart *ngIf="doughnutChartData[0]>0;else noData"
+              [data]="doughnutChartData"
+              [labels]="doughnutChartLabels"
+              [chartType]="doughnutChartType">
+</canvas>
+<ng-template #noData>
+  <div class="my-1">{{doughnutChartLabels}} 0'dır.</div>
+</ng-template>
+</div>

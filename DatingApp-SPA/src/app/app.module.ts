@@ -42,6 +42,9 @@ import { AuthInterceptor } from './_guard/auth.interceptor';
 import { FooterComponent } from './_components/footer/footer.component';
 import { DisableButtonDirective } from './_directives/disable-button.directive';
 import { ReportComponent } from './_components/admin/report/report.component';
+import { AdminStatisticsComponent } from './_components/admin/admin-statistics/admin-statistics.component';
+import { DonutChartComponent } from './_components/admin/admin-statistics/donut-chart/donut-chart.component';
+import {ChartsModule} from 'ng2-charts';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -69,7 +72,9 @@ export function tokenGetter() {
       FilterStringPipe,
       FooterComponent,
       DisableButtonDirective,
-      ReportComponent
+      ReportComponent,
+      AdminStatisticsComponent,
+      DonutChartComponent
    ],
    imports: [
       BrowserModule,
@@ -86,7 +91,8 @@ export function tokenGetter() {
       ButtonsModule.forRoot(),
       ModalModule.forRoot(),
       NgxGalleryModule,
-      FileUploadModule
+      FileUploadModule,
+      ChartsModule
    ],
    providers: [
       AuthService,

@@ -124,5 +124,17 @@ namespace DatingApp.API.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+        [Authorize(Policy = "ModeratePhotoRole")]
+        [HttpGet("getStatistics")] 
+        public async Task<IActionResult> GetStatistics() {
+            var totalUser = await _context.Users.CountAsync();
+            var totalLikes = await _context.Likes.CountAsync();
+            var totalPhotoUploaded = await _context.Likes.CountAsync();
+            return Ok(new {
+                totalUser,
+                totalLikes,
+                totalPhotoUploaded
+            });
+        }
     }
 }

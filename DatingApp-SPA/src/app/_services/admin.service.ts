@@ -30,4 +30,7 @@ getReports() {
 MakeInactive(reportId: number) {
   return this.http.put(this.baseUrl + 'inActivateUser/' + reportId, {});
 }
+GetStatistics() {
+  return this.http.get(this.baseUrl + 'getStatistics');
+}
 }

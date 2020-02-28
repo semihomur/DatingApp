@@ -24,6 +24,9 @@
       <li *appHasRole="['Admin', 'Moderator']" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/admin']">Admin</a>
       </li>
+      <li *appHasRole="['Admin', 'Moderator']" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/adminStatistics']">Statistics</a>
+      </li>
     </ul>
     <div dropdown *ngIf="loggedIn()" class="dropdown" id="dropdownMenuButton" data-toggle="dropdown">
       <span class="mr-1">
