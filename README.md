@@ -11,5 +11,6 @@ MSSql and Entity Framework Core which has that have functions below
 - Likes functionality
 - Private messaging system
 - Identity and Role Management(Admin-Moderator Panel)
-
+- Reports User with reason(Admin able to block user)
+- Statistics for admin
 <br>
